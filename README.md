@@ -1,106 +1,88 @@
-# VLSI-LAB-EXP-5
-SIMULATION AND IMPLEMENTATION OF FINITE STATE MACHINE
+**SIMULATION AND IMPLEMENTATION OF FINITE STATE MACHINE**
 
-AIM: To simulate and synthesis finite state machine using Xilinx ISE.
+**AIM:**
 
-**APPARATUS REQUIRED: **
+To simulate and synthesis finite state machine using Vivado 2023.3
 
-Xilinx 14.7 
-Spartan6 FPGA
+**APPARATUS REQUIRED:**
 
-**PROCEDURE: **
-STEP:1 Start the Xilinx navigator, Select and Name the New project.
-STEP:2 Select the device family, device, package and speed. 
-STEP:3 Select new source in the New Project and select Verilog Module as the Source type. 
-STEP:4 Type the File Name and Click Next and then finish button. Type the code and save it. 
-STEP:5 Select the Behavioral Simulation in the Source Window and click the check syntax. 
-STEP:6 Click the simulation to simulate the program and give the inputs and verify the outputs as per the truth table. 
-STEP:7 Select the Implementation in the Sources Window and select the required file in the Processes Window. 
-STEP:8 Select Check Syntax from the Synthesize XST Process. Double Click in the Floorplan Area/IO/Logic-Post Synthesis process in the User Constraints process group. UCF(User constraint File) is obtaine
-STEP:9 In the Design Object List Window, enter the pin location for each pin in the Loc column Select save from the File menu. 
-STEP:10 Double click on the Implement Design and double click on the Generate Programming File to create a bitstream of the design.(.v) file is converted into .bit file here. 
-STEP:11 On the board, by giving required input, the LEDs starts to glow light, indicating the output.
-STEP:12 Load the Bit file into the SPARTAN 6 FPGA 
+Vivado 2023.3
 
-Logic Diagram :
+**PROCEDURE:**
+
+STEP:1 Start the Vivado, Select and Name the New project.
+
+STEP:2 Select the device family, device, package and speed.
+
+STEP:3 Select new source in the New Project and select Verilog Module as the Source type.
+
+STEP:4 Type the File Name and Click Next and then finish button. Type the code and save it.
+
+STEP:5 Select the Behavioural Simulation in the Source Window and click the check syntax.
+
+STEP:6 Click the simulation to simulate the program and give the inputs and verify the outputs as per the truth table.
+
+**FINITE STATE MACHINE:**
+
+**LOGIC DIAGRAM:**
 
 ![image](https://github.com/navaneethans/VLSI-LAB-EXP-5/assets/6987778/34ec5d63-2b3b-4511-81ef-99f4572d5869)
 
+**VERILOG CODE:**
 
-VERILOG CODE:
-
-VERILOG CODE:
-
-module FSM_moore(clk, rst, x, z);
-
-input clk, rst, x;
-
-output z;
-
-reg [2:1] present_state, NEXT_STATE;
-
-parameter S0=2'b00, S1=2'b01, S2=2'b10, S3=2'b11;
-
-// define the next state combinational circuit
-
-always@(x,present_state)
-
-case(present_state)
-
-S0: if(x)
-
-NEXT_STATE=S1;
-
-else
-
-NEXT_STATE=S0;
-
-S1: if(x)
-
-NEXT_STATE=S1;
-
-else
-
-NEXT_STATE=S2;
-
-S2: if(x)
-
-NEXT_STATE=S3;
-
-else
-
-NEXT_STATE=S0;
-
-S3: if(x)
-
-NEXT_STATE=S1;
-
-else
-
-NEXT_STATE=S2;
-
-endcase
-
-//define the sequential block
-
-always@(negedge rst, posedge clk)
-
+```
+module fsm( clk, rst, inp, outp);
+input clk, rst, inp;
+output outp;
+reg [1:0] state;
+reg outp;
+always @(posedge clk, posedge rst)
+begin
 if(rst)
-
-present_state<=S0;
-
+state<=2'b00;
 else
-
-present_state<=NEXT_STATE;
-
-assign z=(present_state==S3); // define output
-
+begin
+case(state)
+2'b00:
+begin
+if(inp) state <=2'b01;
+else state <=2'b10;
+end
+2'b01:
+begin
+if (inp) state <=2'b11;
+else state<=2'b10;
+end
+2'b10:
+begin
+if (inp) state<=2'b01;
+else state <=2'b11;
+end
+2'b11:
+begin
+if (inp) state <=2'b01;
+else state <=2'b10;
+end
+endcase
+end
+end
+always @(posedge clk, posedge rst)
+begin
+if(rst)
+outp <= 0;
+else if(state == 2'b11)
+outp <= 1;
+else outp<= 0;
+end
 endmodule
-OUTPUT:
-![image](https://github.com/Dukkapalliashok/VLSI-LAB-EXP-5/assets/166902469/6455bd70-5298-4888-a651-89ddc538ae3a)
+```
+
+**OUTPUT:**
+
+![fsm1](https://github.com/Dhinesh0024/VLSI-LAB-EXP-5/assets/160568927/5a093168-10f6-4f6c-b4f7-cdfa69e883d4)
 
 
-RESULT:
-Thus the simulation and synthesis of finite state machine using vivado 2023.2 was successfully executed and verified.
+**RESULT:**
 
+Hence the finite state machine has been simulated and synthesised using Vivado 2023.2
 
